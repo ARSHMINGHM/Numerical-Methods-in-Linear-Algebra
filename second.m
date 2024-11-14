@@ -1,0 +1,44 @@
+clear;
+close all;
+clc;
+syms x
+eqn = x^3 - 4*x^2 -10;
+xright = input("right of bound :");
+xleft = input("left of bound :");
+xmid = (xright + xleft)/2;
+err = 10;
+fprintf("   xleft   |    xright   |   xmid   \n")
+fprintf("    %d     |      %d     |    %d    \n",xleft,xright,xmid)
+while(err > 0.001)
+    x = xright;
+    yright = subs(eqn);
+    x = xleft;
+    yleft = subs(eqn);
+    x = xmid;
+    ymid = subs(eqn);
+    if((yright > 0 && yleft > 0)||(yright < 0 && yleft < 0))
+        break;
+    elseif(yright == 0)
+        err = 0;
+        root = xright;
+    elseif(yleft == 0)
+        err = 0;
+        root = xleft;
+    elseif(xmid == 0)
+        err = 0;
+        root = xmid;
+    elseif((yright > 0 && ymid < 0)||(yright < 0 && ymid > 0))
+        xleft = xmid;
+        xmid = (xright + xmid)/2;
+        err = abs(ymid);
+    elseif((yleft > 0 && ymid < 0)||(yleft < 0 && ymid > 0))
+        xright = xmid;
+        xmid = (xleft + xmid)/2;
+        err = abs(ymid);
+    end
+    x = xmid;
+    ymid = subs(eqn);
+    fprintf("    %d     |      %d     |    %d    \n",xleft,xright,xmid)
+    root = xmid;
+end
+fprintf("root is : %d \n",root)
